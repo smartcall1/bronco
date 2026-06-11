@@ -144,7 +144,7 @@ def run_checks(state):
             )
     return all_alerts
 
-HEARTBEAT_INTERVAL = 3600  # 1시간마다 생존 알림
+HEARTBEAT_INTERVAL = 1800  # 30분마다 생존 알림
 
 def main():
     state = load_state()
