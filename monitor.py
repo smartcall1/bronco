@@ -50,13 +50,14 @@ def fetch_page(url, timeout=15):
 
 # ── 텔레그램 ──────────────────────────────────────────────────────────────────
 
-def send_telegram(message):
+def send_telegram(message, silent=False):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     try:
         requests.post(url, json={
             "chat_id": TELEGRAM_CHAT_ID,
             "text": message,
             "parse_mode": "HTML",
+            "disable_notification": silent,
         }, timeout=10)
     except requests.RequestException:
         pass
@@ -169,7 +170,8 @@ def main():
             send_telegram(
                 f"🫡 변화 없음, 주시 중!\n"
                 f"Ticketek + Tixel 모두 이상 없어요.\n"
-                f"⏰ {now}"
+                f"⏰ {now}",
+                silent=True,
             )
             last_heartbeat = time.time()
 
