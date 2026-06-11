@@ -143,11 +143,15 @@ def run_checks(state):
             )
     return all_alerts
 
+HEARTBEAT_INTERVAL = 3600  # 1시간마다 생존 알림
+
 def main():
     state = load_state()
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     send_telegram(f"🚀 브롱코스 티켓 모니터 시작!\n{now}\n30분마다 체크할게요.")
     print(f"[{now}] 모니터 시작")
+
+    last_heartbeat = time.time()
 
     while True:
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -160,6 +164,14 @@ def main():
 
         if not alerts:
             print(f"[{now}] 변화 없음")
+
+        if time.time() - last_heartbeat >= HEARTBEAT_INTERVAL:
+            send_telegram(
+                f"🫡 변화 없음, 주시 중!\n"
+                f"Ticketek + Tixel 모두 이상 없어요.\n"
+                f"⏰ {now}"
+            )
+            last_heartbeat = time.time()
 
         time.sleep(CHECK_INTERVAL)
 
